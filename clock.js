@@ -6,13 +6,47 @@
   
   ctx.translate(radius,radius);
   radius = radius * 0.90;
-  
-  drawClock(ctx,radius);
+
+  setInterval(function (){
+   drawClock(ctx,radius);
+  },10);
  };
+ function drawTime(ctx,radius){
+   var now = new Date(),
+   hour = now.getHours(),
+   minute = now.getMinutes(),
+   second = now.getSeconds();
+   
+   hour = hour%12;
+   hour = (hour*Math.PI/6)+
+   (minute*Math.PI/(6*60))+
+   (second*Math.PI/(60*360));
+   drawHand(ctx,hour,radius*0.5,radius*0.07);
+   
+   minute = (minute*Math.PI/30)+
+   (second*Math.PI/(30*60));
+   drawHand(ctx, minute,radius*0.8,radius*0.07);
+   
+   second = (second*Math.PI/30);
+   drawHand(ctx,second,radius*0.9,radius*0.02);
+   
+ }
  
+ function drawHand(ctx,pos,length,width){
+   ctx.beginPath();
+   ctx.lineWidth=width;
+   ctx.lineCap="round";
+   ctx.moveTo(0,0);
+   ctx.rotate(pos);
+   ctx.lineTo(0,-length);
+   ctx.stroke();
+   ctx.rotate(-pos);
+ }
+
  function drawClock(ctx,radius){
   drawFace(ctx,radius);
   drawNumbers(ctx,radius);
+  drawTime(ctx, radius);
  }
  
  function drawNumbers(ctx,radius){
